@@ -14,8 +14,8 @@ namespace KarmaMVPTest.Data
         {
 
         }
-        DbSet<Product> Products { get; set; }
-        DbSet<Subcategory> Subcategories { get; set; }
-        DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Subcategory> Subcategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

@@ -11,9 +11,10 @@ using System;
 namespace KarmaMVPTest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190626152643_AddingColumnToProductInDBForTestings")]
+    partial class AddingColumnToProductInDBForTestings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,8 +51,6 @@ namespace KarmaMVPTest.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
-
-                    b.Property<int>("UserIdTESTING");
 
                     b.HasKey("Id");
 
