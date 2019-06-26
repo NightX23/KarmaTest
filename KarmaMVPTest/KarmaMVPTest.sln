@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarmaMVPTest", "KarmaMVPTest\KarmaMVPTest.csproj", "{ECC3CC79-10E7-4D61-8B79-A75F1006F75A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECC3CC79-10E7-4D61-8B79-A75F1006F75A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC3CC79-10E7-4D61-8B79-A75F1006F75A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC3CC79-10E7-4D61-8B79-A75F1006F75A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC3CC79-10E7-4D61-8B79-A75F1006F75A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B3A9A32-1215-43B4-AF7B-F7C1707E42F9}
+	EndGlobalSection
+EndGlobal
