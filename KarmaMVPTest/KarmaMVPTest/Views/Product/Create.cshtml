@@ -1,4 +1,4 @@
-﻿@model KarmaMVPTest.Models.Product
+﻿@model KarmaMVPTest.ViewModels.CategorySubAndProducthViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,35 +13,38 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="ProductObj.Title" class="control-label"></label>
+                <input asp-for="ProductObj.Title" class="form-control" />
+                <span asp-validation-for="ProductObj.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="ProductObj.Description" class="control-label"></label>
+                <input asp-for="ProductObj.Description" class="form-control" />
+                <span asp-validation-for="ProductObj.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SubcategoryId" class="control-label"></label>
-                <select asp-for="SubcategoryId" class ="form-control" asp-items="ViewBag.SubcategoryId"></select>
+                <label class="control-label">Categoría</label>
+                <select id="categories_dropdown" asp-items="@(new SelectList(Model.CategoriesList,"Id","Name"))" class="form-control"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Condition" class="control-label"></label>
-                <input asp-for="Condition" class="form-control" />
-                <span asp-validation-for="Condition" class="text-danger"></span>
+                <label asp-for="ProductObj.SubcategoryId" class="control-label"></label>
+                <select id="subcategories_dropdown" asp-for="ProductObj.SubcategoryId" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ProductObj.Condition" class="control-label"></label>
+                <input asp-for="ProductObj.Condition" class="form-control" />
+                <span asp-validation-for="ProductObj.Condition" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="PublicationStatus" /> @Html.DisplayNameFor(model => model.PublicationStatus)
+                        <input asp-for="ProductObj.PublicationStatus" /> @Html.DisplayNameFor(model => model.ProductObj.PublicationStatus)
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
+                @Html.DisplayFor(m => m.ProductObj.CreationDate)
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -53,6 +56,53 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+                window.onload = function () {
+                    var selectCategoryInput = document.getElementById("categories_dropdown");
+                    loadSubcategories();
+                    selectCategoryInput.addEventListener("change", loadSubcategories);
+                }
+
+                var categories = [];
+                @foreach (var category in Model.SubcategoriesList)
+                {
+                    @:var newSubcategory =
+                    @:{
+                        @:Name: "@category.Name",
+                        @:CategoryId: @category.Category.Id,
+                        @:SubcategoryId: @category.Id,
+                    @:}
+                    @:categories.push(newSubcategory);
+                }
+
+                function loadSubcategories() {
+                    var selectCategoryInput = document.getElementById("categories_dropdown");
+                    var categorySelected = selectCategoryInput.options[selectCategoryInput.selectedIndex].value;
+                    var categorySelectedInt = parseInt(categorySelected);
+                    var SubcategoryFilter = categories.filter(function (subcategory) {
+                        if (subcategory.CategoryId === categorySelectedInt) {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    var selectSubcategoryInput = document.getElementById("subcategories_dropdown");
+                    var selectSubcategoryInputOption = selectSubcategoryInput.options;
+
+                    for (var i = selectSubcategoryInputOption.length; i > 0; i--) {
+                        selectSubcategoryInputOption[i-1].remove();
+                    }
+
+                    SubcategoryFilter.forEach(function (element) {
+                        var newOption = document.createElement('option');
+                        newOption.value = element.SubcategoryId;
+                        newOption.innerHTML = element.Name;
+                        selectSubcategoryInput.appendChild(newOption);
+                    });
+                }
+
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

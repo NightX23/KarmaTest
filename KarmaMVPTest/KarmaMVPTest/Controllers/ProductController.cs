@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KarmaMVPTest.Data;
 using KarmaMVPTest.Models;
+using KarmaMVPTest.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,17 +12,16 @@ namespace KarmaMVPTest.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationRepository _repository;
 
-        public ProductController(ApplicationDbContext db)
+        public ProductController(ApplicationRepository repository)
         {
-            _db = db;
+            _repository = repository;
         }
 
         public IActionResult Index()
         {
-            var products = _db.Products.Where(p => p.UserIdTESTING == 0).Include(p => p.Subcategory)
-                .Include(p => p.Subcategory.Category).ToList();
+            var products = _repository.GetProducts();
 
             return View(products);
         }
@@ -29,23 +29,34 @@ namespace KarmaMVPTest.Controllers
         //Create GET
         public IActionResult Create()
         {
-            Product productObj = new Product();
+            CategorySubAndProducthViewModel model = new CategorySubAndProducthViewModel
+            {
+                CategoriesList = _repository.GetCategories(),
+                SubcategoriesList = _repository.GetSubcategories()
+            };
 
-            return View(productObj);
+            return View(model);
         }
 
         //Create POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(CategorySubAndProducthViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _db.Add(product);
-                await _db.SaveChangesAsync();
+                _repository._db.Add(model.ProductObj);
+                await _repository._db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+
+            var newmodel = new CategorySubAndProducthViewModel
+            {
+                CategoriesList = _repository.GetCategories(),
+                SubcategoriesList = _repository.GetSubcategories()
+            };
+
+            return View(newmodel);
         }
     }
 }

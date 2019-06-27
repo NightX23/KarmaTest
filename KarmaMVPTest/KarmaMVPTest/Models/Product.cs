@@ -12,6 +12,7 @@ namespace KarmaMVPTest.Models
         public Product()
         {
             UserIdTESTING = 0;
+            CreationDate = DateTime.Now;
         }
         public int Id { get; set; }
 
