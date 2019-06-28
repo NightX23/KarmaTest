@@ -1,0 +1,125 @@
+﻿@model KarmaMVPTest.ViewModels.CategorySubAndProducthViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductObj.Id" />
+            <div class="form-group">
+                <label asp-for="ProductObj.Title" class="control-label"></label>
+                <input asp-for="ProductObj.Title" class="form-control" />
+                <span asp-validation-for="ProductObj.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductObj.Description" class="control-label"></label>
+                <input asp-for="ProductObj.Description" class="form-control" />
+                <span asp-validation-for="ProductObj.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Categoria</label>
+                <select id= "categories_dropdown" asp-items="@(new SelectList(Model.CategoriesList,"Id", "Name"))" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductObj.SubcategoryId" class="control-label"></label>
+                <select id = "subcategories_dropdown" asp-for="ProductObj.SubcategoryId" class="form-control"></select>
+                <span asp-validation-for="ProductObj.SubcategoryId" class="text-danger"></span> 
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductObj.Condition" class="control-label"></label>
+                <input asp-for="ProductObj.Condition" class="form-control" />
+                <span asp-validation-for="ProductObj.Condition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="ProductObj.PublicationStatus" /> @Html.DisplayNameFor(model => model.ProductObj.PublicationStatus)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+            @Html.DisplayFor(m => m.ProductObj.Subcategory.CategoryId)
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<script>
+    window.onload = function () {
+
+        var selectCategoryInput = document.getElementById("categories_dropdown");
+
+        $('#categories_dropdown option').each(function (index, element) {
+            if (element.value == @Model.ProductObj.Subcategory.CategoryId) {
+                selectcategoryInput.selectedIndex = index;
+            }
+        });
+
+        loadSubcategories();
+        var selectsubcategoryInput = document.getElementById("subcategories_dropdown");
+
+        $('#subcategories_dropdown option').each(function (index, element) {
+            if (element.value == @Model.ProductObj.SubcategoryId) {
+                selectsubcategoryInput.selectedIndex = index;
+            }
+        });
+
+        selectCategoryInput.addEventListener("change", loadSubcategories);
+    }
+
+    var categories = [];
+    @foreach (var category in Model.SubcategoriesList)
+    {
+        @:var newSubcategory =
+        @:{
+            @:Name: "@category.Name",
+            @:CategoryId: @category.Category.Id,
+            @:SubcategoryId: @category.Id,
+        @:}
+        @:categories.push(newSubcategory);
+     }
+
+                function loadSubcategories() {
+                    var selectCategoryInput = document.getElementById("categories_dropdown");
+                    var categorySelected = selectCategoryInput.options[selectCategoryInput.selectedIndex].value;
+                    var categorySelectedInt = parseInt(categorySelected);
+                    var SubcategoryFilter = categories.filter(function (subcategory) {
+                        if (subcategory.CategoryId === categorySelectedInt) {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    var selectSubcategoryInput = document.getElementById("subcategories_dropdown");
+                    var selectSubcategoryInputOption = selectSubcategoryInput.options;
+
+                    for (var i = selectSubcategoryInputOption.length; i > 0; i--) {
+                        selectSubcategoryInputOption[i-1].remove();
+                    }
+
+                    SubcategoryFilter.forEach(function (element) {
+                        var newOption = document.createElement('option');
+                        newOption.value = element.SubcategoryId;
+                        newOption.innerHTML = element.Name;
+                        selectSubcategoryInput.appendChild(newOption);
+                    });
+                }
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

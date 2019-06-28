@@ -15,7 +15,8 @@ namespace KarmaMVPTest.Data
         {
             _db = db;
         }
-
+        
+        //PRODUCTS QUERIES---------------------------------------
         public List<Category> GetCategories()
         {
             return _db.Categories.ToList();
@@ -26,10 +27,16 @@ namespace KarmaMVPTest.Data
             return _db.Subcategories.Include(s =>s.Category).ToList();
         }
 
-        public List<Product> GetProducts()
+        public List<Product> GetProductsList()
         {
             return _db.Products.Where(p => p.UserIdTESTING == 0).Include(p => p.Subcategory)
                 .Include(p => p.Subcategory.Category).ToList();
         }
+
+        public Product GetProduct(int id)
+        {
+            return _db.Products.SingleOrDefault(p => p.Id == id);
+        }
+        //-----------------------------------------------------------------------------------------
     }
 }
