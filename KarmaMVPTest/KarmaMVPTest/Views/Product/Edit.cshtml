@@ -47,7 +47,6 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
-            @Html.DisplayFor(m => m.ProductObj.Subcategory.CategoryId)
         </form>
     </div>
 </div>
@@ -64,7 +63,7 @@
 
         $('#categories_dropdown option').each(function (index, element) {
             if (element.value == @Model.ProductObj.Subcategory.CategoryId) {
-                selectcategoryInput.selectedIndex = index;
+                selectCategoryInput.selectedIndex = index;
             }
         });
 
